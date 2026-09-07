@@ -20,6 +20,7 @@ class MessageMiddlewareQueueRabbitMQ(MessageMiddlewareQueue):
             self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host))
             self.channel = self.connection.channel()
             self.channel.queue_declare(queue=self.queue_name)
+            self.channel.basic_qos(prefetch_count=1) 
         except pika.exceptions.AMQPConnectionError as e:
             raise MessageMiddlewareDisconnectedError(str(e))
         except Exception as e:
